@@ -25,14 +25,16 @@ mssql.connect(config).then(function() {
             modbusClient.readInputRegisters(17, 18).then(function (resp) {
                 console.log(resp.register[0]);
                 updateData(resp.register[0]);
-            }).fail(console.log);
+            }).fail(function(errx){
+                console.log(errx);
+            });
         },2000);
     });
-    client.on('error', function (err) {
+    modbusClient.on('error', function (err) {
         console.log(err);
     });
 }).catch(function(err){
-
+    console.log(err);
 });
 var updateData = function(data){
     var sql = "UPDATE [PertaminaTas].[dbo].[JembatanTimbang]";
