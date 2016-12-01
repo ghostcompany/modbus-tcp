@@ -1,3 +1,4 @@
 https://github.com/Unitech/pm2/issues/1079
 https://github.com/coreybutler/node-windows
 http://stackoverflow.com/questions/29797946/handling-bad-json-parse-in-node-safely
+http://stackoverflow.com/questions/16333790/node-js-quick-file-server-static-files-over-http
