@@ -1,4 +1,13 @@
 var net = require('net');
+var scale = 0;
+var numHex = function(s)
+{
+  var a = s.toString(16);
+  if ((a.length % 2) > 0) {
+    a = '0' + a;
+  }
+  return a;
+}
 var server = net.createServer(function (socket) {
 	socket.on('data',function(so,id){
 		console.log(socket.remotePort);
@@ -19,7 +28,15 @@ var server = net.createServer(function (socket) {
 			var quantity = pdu.slice(3, 5).readUInt16BE(0);
 			console.log(so);
 			if( funcCode == 4 ){
-				var resp =  new Buffer([0x00, (request.trans_id).toString(16), 0x00, 0x00, 0x00, 0x05, 0x00,0x04,0x02, 0x12, 0x34]);
+				if(scale > 255){
+				  var a = scale%255;
+				  var b = (scale - a)/255;
+				  //console.log(numHex(a));
+				  //console.log(numHex(b));
+				  var resp =  new Buffer([0x00, (request.trans_id).toString(16), 0x00, 0x00, 0x00, 0x05, 0x00,0x04,0x02, numHex(b), numHex(a)]);
+				} else {
+				  var resp =  new Buffer([0x00, (request.trans_id).toString(16), 0x00, 0x00, 0x00, 0x05, 0x00,0x04,0x02, numHex(scale), 0x00]);
+				}
 				console.log(resp);
 				socket.write(resp);
 			}
@@ -40,3 +57,22 @@ server.on('error',function(e){
 server.on('data',function(e){
   console.log(e);
 });
+var sqr;
+var loop = 0;
+ var rise;
+setInterval(function(){
+	sqr = (loop * loop) + (12 * loop) + 20;
+	scale = sqr;
+	if(loop >= 20){
+		rise = true;
+  } else if(loop<1) {
+    rise = false;
+  }
+  //console.log(sqr,rise,loop);
+	if(rise){
+		loop--;
+  } else {
+    loop++;
+  }
+  
+},500);
