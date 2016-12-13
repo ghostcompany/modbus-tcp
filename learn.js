@@ -33,9 +33,9 @@ var server = net.createServer(function (socket) {
 				  var b = (scale - a)/255;
 				  //console.log(numHex(a));
 				  //console.log(numHex(b));
-				  var resp =  new Buffer([0x00, (request.trans_id).toString(16), 0x00, 0x00, 0x00, 0x05, 0x00,0x04,0x02, numHex(b), numHex(a)]);
+				  var resp =  new Buffer([0x00, (request.trans_id).toString(16), 0x00, 0x00, 0x00, 0x05, 0x00,0x04,0x02, b.toString(16), a.toString(16)]);
 				} else {
-				  var resp =  new Buffer([0x00, (request.trans_id).toString(16), 0x00, 0x00, 0x00, 0x05, 0x00,0x04,0x02, numHex(scale), 0x00]);
+				  var resp =  new Buffer([0x00, (request.trans_id).toString(16), 0x00, 0x00, 0x00, 0x05, 0x00,0x04,0x02, 0x00, scale.toString(16)]);
 				}
 				console.log(resp);
 				socket.write(resp);
@@ -63,7 +63,7 @@ var loop = 0;
 setInterval(function(){
 	sqr = (loop * loop) + (12 * loop) + 20;
 	scale = sqr;
-	if(loop >= 20){
+	if(loop >= 50){
 		rise = true;
   } else if(loop<1) {
     rise = false;
@@ -75,4 +75,4 @@ setInterval(function(){
     loop++;
   }
   
-},500);
+},1000);
